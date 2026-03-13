@@ -4,6 +4,7 @@ import { Admin } from './models/Admin';
 
 const MONGO_URI = process.env.MONGO_URI || "mongodb://delta:123@82.25.109.155:27017/tlogic";
 
+console.log(MONGO_URI,"MONGO_URI");
 export async function connectDB() {
   await mongoose.connect(MONGO_URI);
   console.log('✅ MongoDB connected');
