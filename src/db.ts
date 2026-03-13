@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { Admin } from './models/Admin';
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/tlogic';
+const MONGO_URI = process.env.MONGO_URI || "mongodb://delta:123@82.25.109.155:27017/tlogic";
 
 export async function connectDB() {
   await mongoose.connect(MONGO_URI);
