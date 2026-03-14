@@ -18,8 +18,20 @@ router.post('/student/login', async (req: Request, res: Response) => {
   const match = await bcrypt.compare(password, student.passwordHash);
   if (!match) return res.status(401).json({ error: 'Invalid credentials' });
 
-  if (student.examCompleted)
-    return res.status(403).json({ error: 'Exam already completed. Login not allowed.' });
+  // Completed students can re-login to view grades — issue a long-lived read-only token
+  if (student.examCompleted) {
+    const token = signToken(student._id.toString(), 'student', '30d');
+    return res.json({
+      token,
+      student: {
+        id: student._id,
+        name: student.name,
+        studentId: student.studentId,
+        examCompleted: true,
+        suspendedReason: student.suspendedReason ?? null,
+      },
+    });
+  }
 
   const token = signToken(student._id.toString(), 'student');
   res.json({
@@ -28,7 +40,8 @@ router.post('/student/login', async (req: Request, res: Response) => {
       id: student._id,
       name: student.name,
       studentId: student.studentId,
-      examStartedAt: student.examStartedAt, // null if not yet started
+      examCompleted: false,
+      examStartedAt: student.examStartedAt,
     },
   });
 });

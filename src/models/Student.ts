@@ -7,6 +7,7 @@ const studentSchema = new mongoose.Schema({
   examStartedAt: { type: Date, default: null },
   examSubmittedAt: { type: Date, default: null },
   examCompleted: { type: Boolean, default: false },
+  suspendedReason: { type: String, default: null },
 }, { timestamps: true });
 
 export const Student = mongoose.model('Student', studentSchema);

@@ -115,12 +115,15 @@ router.get('/grades', requireStudent, async (req: AuthRequest, res: Response) =>
     totalMarks,
     totalPossible,
     submittedAt: student.examSubmittedAt,
+    suspendedReason: student.suspendedReason ?? null,
     results,
   });
 });
 
-// Submit exam
+// Submit exam  (optional body: { reason: string } for auto-suspend)
 router.post('/submit', requireStudent, async (req: AuthRequest, res: Response) => {
+  const { reason } = req.body as { reason?: string };
+
   const student = await Student.findById(req.user!.id);
   if (!student) return res.status(404).json({ error: 'Student not found' });
   if (student.examCompleted)
@@ -128,9 +131,14 @@ router.post('/submit', requireStudent, async (req: AuthRequest, res: Response) =
 
   student.examCompleted = true;
   student.examSubmittedAt = new Date();
+  if (reason) student.suspendedReason = reason;
   await student.save();
 
-  res.json({ message: 'Exam submitted successfully', submittedAt: student.examSubmittedAt });
+  res.json({
+    message: reason ? 'Exam suspended and submitted' : 'Exam submitted successfully',
+    submittedAt: student.examSubmittedAt,
+    suspended: !!reason,
+  });
 });
 
 export default router;

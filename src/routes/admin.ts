@@ -11,7 +11,10 @@ const router = Router();
 
 // List all students
 router.get('/students', requireAdmin, async (_req: AuthRequest, res: Response) => {
-  const students = await Student.find().select('-passwordHash -__v').sort({ createdAt: -1 });
+  const students = await Student.find()
+    .select('studentId name examStartedAt examSubmittedAt examCompleted suspendedReason createdAt')
+    .sort({ createdAt: -1 })
+    .lean();
   res.json(students);
 });
 
@@ -44,7 +47,9 @@ router.delete('/students/:id', requireAdmin, async (req: AuthRequest, res: Respo
 
 // Get student's answers with question details
 router.get('/students/:id/answers', requireAdmin, async (req: AuthRequest, res: Response) => {
-  const student = await Student.findById(req.params.id).select('-passwordHash');
+  const student = await Student.findById(req.params.id)
+    .select('studentId name examStartedAt examSubmittedAt examCompleted suspendedReason createdAt')
+    .lean();
   if (!student) return res.status(404).json({ error: 'Student not found' });
 
   const questions = await Question.find().sort({ order: 1 });

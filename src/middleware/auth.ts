@@ -41,7 +41,7 @@ export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction
   }
 }
 
-export function signToken(id: string, role: 'student' | 'admin') {
-  const expiresIn = role === 'admin' ? '8h' : '2h';
-  return jwt.sign({ id, role }, JWT_SECRET, { expiresIn });
+export function signToken(id: string, role: 'student' | 'admin', expiresIn?: string) {
+  const defaultExpiry = role === 'admin' ? '8h' : '2h';
+  return jwt.sign({ id, role }, JWT_SECRET, { expiresIn: expiresIn ?? defaultExpiry });
 }
