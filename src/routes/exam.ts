@@ -3,6 +3,7 @@ import { requireStudent, AuthRequest } from '../middleware/auth';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
 import { Student } from '../models/Student';
+import { ExamLog } from '../models/ExamLog';
 
 const router = Router();
 
@@ -139,6 +140,21 @@ router.post('/submit', requireStudent, async (req: AuthRequest, res: Response) =
     submittedAt: student.examSubmittedAt,
     suspended: !!reason,
   });
+});
+
+// Log an exam activity event (called by frontend during exam)
+router.post('/log', requireStudent, async (req: AuthRequest, res: Response) => {
+  const { event, detail } = req.body;
+  if (!event) return res.status(400).json({ error: 'event required' });
+
+  await ExamLog.create({
+    studentId: req.user!.id,
+    event,
+    detail: detail || null,
+    timestamp: new Date(),
+  });
+
+  res.json({ logged: true });
 });
 
 export default router;

@@ -4,6 +4,7 @@ import { requireAdmin, AuthRequest } from '../middleware/auth';
 import { Student } from '../models/Student';
 import { Question } from '../models/Question';
 import { Answer } from '../models/Answer';
+import { ExamLog } from '../models/ExamLog';
 
 const router = Router();
 
@@ -89,6 +90,14 @@ router.post('/students/:id/grade', requireAdmin, async (req: AuthRequest, res: R
   );
 
   res.json({ message: 'Grades saved' });
+});
+
+// Get exam activity logs for a student
+router.get('/students/:id/logs', requireAdmin, async (req: AuthRequest, res: Response) => {
+  const logs = await ExamLog.find({ studentId: req.params.id })
+    .sort({ timestamp: 1 })
+    .lean();
+  res.json(logs);
 });
 
 // ── Questions ──────────────────────────────────────────────────────────────────
