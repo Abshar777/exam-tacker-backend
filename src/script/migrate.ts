@@ -14,11 +14,11 @@
  */
 
 import mongoose from 'mongoose';
-import { Exam }    from './models/Exam';
-import { Student } from './models/Student';
-import { Question } from './models/Question';
-import { Answer }  from './models/Answer';
-import { ExamLog } from './models/ExamLog';
+import { Exam }    from '../models/Exam';
+import { Student } from '../models/Student';
+import { Question } from '../models/Question';
+import { Answer }  from '../models/Answer';
+import { ExamLog } from '../models/ExamLog';
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/tlogic';
 
