@@ -7,6 +7,7 @@ const answerSchema = new mongoose.Schema({
   savedAt: { type: Date, default: Date.now },
   marksAwarded: { type: Number, default: null },
   feedback: { type: String, default: null },
+  examId: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam', default: null },
 }, { timestamps: true });
 
 answerSchema.index({ studentId: 1, questionId: 1 }, { unique: true });

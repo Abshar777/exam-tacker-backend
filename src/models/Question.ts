@@ -10,6 +10,7 @@ const questionSchema = new mongoose.Schema({
   options: { type: [String], default: [] }, // for MCQ
   order: { type: Number, required: true },
   maxMarks: { type: Number, required: true, default: 10 },
+  examId: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam', required: true },
 }, { timestamps: true });
 
 export const Question = mongoose.model('Question', questionSchema);

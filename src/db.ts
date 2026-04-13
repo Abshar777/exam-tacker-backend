@@ -14,10 +14,11 @@ export async function connectDB() {
 }
 
 async function seedAdmin() {
-  const count = await Admin.countDocuments();
-  if (count === 0) {
-    const passwordHash = await bcrypt.hash("admin123", 10);
-    await Admin.create({ username: "admin", passwordHash });
-    console.log("✅ Default admin created: admin / admin123");
-  }
+  const passwordHash = await bcrypt.hash("tLogic@2025", 10);
+  await Admin.findOneAndUpdate(
+    {},
+    { username: "tlogic-admin", passwordHash },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+  console.log("✅ Admin credentials set: tlogic-admin / tLogic@2025");
 }

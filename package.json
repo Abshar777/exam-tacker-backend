@@ -4,7 +4,10 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
-    "build": "bun build src/index.ts --compile --outfile dist/index"
+    "build": "bun build src/index.ts --compile --outfile dist/index",
+    "migrate": "bun run src/migrate.ts",
+    "rehash": "bun run src/rehash-passwords.ts",
+    "reset-passwords": "bun run src/reset-passwords.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
